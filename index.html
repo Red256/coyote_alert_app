@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coyote Alert - Data Deletion Request</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #F5F0E8 0%, #E8DCC8 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2596be 0%, #1fc5f5 100%);
+            padding: 40px 30px;
+            text-align: center;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 16px;
+            opacity: 0.95;
+            line-height: 1.5;
+        }
+
+        .content {
+            padding: 40px 30px;
+        }
+
+        .info-box {
+            background: #f8f9fa;
+            border-left: 4px solid #2596be;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 8px;
+        }
+
+        .info-box h2 {
+            font-size: 18px;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .info-box p {
+            font-size: 14px;
+            color: #6c757d;
+            line-height: 1.6;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            font-size: 16px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        input[type="email"],
+        textarea {
+            width: 100%;
+            padding: 15px;
+            font-size: 16px;
+            border: 2px solid #e1e8ed;
+            border-radius: 10px;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        input[type="email"]:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #2596be;
+            box-shadow: 0 0 0 3px rgba(37, 150, 190, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .helper-text {
+            font-size: 13px;
+            color: #6c757d;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: flex-start;
+            padding: 15px;
+            border: 2px solid #e1e8ed;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .radio-option:hover {
+            border-color: #2596be;
+            background: #f8f9fa;
+        }
+
+        .radio-option input[type="radio"] {
+            margin-right: 12px;
+            margin-top: 3px;
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
+            accent-color: #2596be;
+        }
+
+        .radio-label {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .radio-label strong {
+            font-size: 16px;
+            color: #2c3e50;
+            display: block;
+        }
+
+        .radio-label small {
+            font-size: 13px;
+            color: #6c757d;
+            display: block;
+            line-height: 1.4;
+        }
+
+        .radio-option input[type="radio"]:checked + .radio-label strong {
+            color: #2596be;
+        }
+
+        .radio-option:has(input[type="radio"]:checked) {
+            border-color: #2596be;
+            background: #f0f8ff;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            font-size: 18px;
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(39, 174, 96, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .success-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .success-modal.show {
+            display: flex;
+        }
+
+        .success-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 400px;
+            margin: 20px;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .success-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        .success-content h2 {
+            font-size: 24px;
+            color: #27ae60;
+            margin-bottom: 15px;
+        }
+
+        .success-content p {
+            font-size: 16px;
+            color: #6c757d;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .close-btn {
+            padding: 12px 30px;
+            background: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .close-btn:hover {
+            background: #229954;
+        }
+
+        .error-message {
+            background: #fee;
+            border: 1px solid #fcc;
+            color: #c33;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #6c757d;
+            font-size: 14px;
+            border-top: 1px solid #e1e8ed;
+        }
+
+        @media (max-width: 600px) {
+            .header {
+                padding: 30px 20px;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .content {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🐺 Coyote Alert</h1>
+            <p>Privacy Center</p>
+        </div>
+
+        <div class="content">
+            <div class="info-box">
+                <h2>Privacy Requests</h2>
+                <p>
+                    Submit a data deletion request or contact us with any privacy-related questions. 
+                    We will respond within 30 days in accordance with applicable privacy laws.
+                </p>
+            </div>
+
+            <div id="errorMessage" class="error-message"></div>
+
+            <form id="privacyForm">
+                <div class="form-group">
+                    <label for="requestType">Request Type *</label>
+                    <div class="radio-group">
+                        <label class="radio-option">
+                            <input type="radio" name="requestType" value="deletion" checked>
+                            <span class="radio-label">
+                                <strong>🗑️ Data Deletion Request</strong>
+                                <small>Request to delete all your personal data</small>
+                            </span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="requestType" value="inquiry">
+                            <span class="radio-label">
+                                <strong>❓ Privacy Inquiry</strong>
+                                <small>Questions about data privacy, access, or policies</small>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address *</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        placeholder="your.email@example.com"
+                        required
+                    >
+                    <div class="helper-text">
+                        Enter the email address associated with your Coyote Alert account
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="message" id="messageLabel">Message (Optional)</label>
+                    <textarea 
+                        id="message" 
+                        name="message" 
+                        placeholder="Enter your message here..."
+                    ></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    Submit Request
+                </button>
+            </form>
+        </div>
+
+        <div class="footer">
+            &copy; 2026 Coyote Alert. All rights reserved.
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="success-modal">
+        <div class="success-content">
+            <div class="success-icon">✅</div>
+            <h2 id="successTitle">Request Submitted!</h2>
+            <p id="successMessage">
+                Your request has been received. We will respond to the email address you provided within 30 days.
+            </p>
+            <button class="close-btn" onclick="closeModal()">Close</button>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
+        import { getFirestore, collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBB5lKSv7HhnOmm6LojZd7AEoHYS9rKY_A",
+            authDomain: "coyote-9cfe2.firebaseapp.com",
+            projectId: "coyote-9cfe2",
+            storageBucket: "coyote-9cfe2.firebasestorage.app",
+            messagingSenderId: "967606317828",
+            appId: "1:967606317828:web:515ee105608b85afc9d651",
+            measurementId: "G-37X7ZBNKTY"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Form submission handler
+        const form = document.getElementById('privacyForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const errorMessage = document.getElementById('errorMessage');
+        const successModal = document.getElementById('successModal');
+        const successTitle = document.getElementById('successTitle');
+        const successMessage = document.getElementById('successMessage');
+        const messageLabel = document.getElementById('messageLabel');
+
+        // Update label and placeholder based on request type
+        const requestTypeInputs = document.querySelectorAll('input[name="requestType"]');
+        requestTypeInputs.forEach(input => {
+            input.addEventListener('change', (e) => {
+                const messageTextarea = document.getElementById('message');
+                if (e.target.value === 'deletion') {
+                    messageLabel.textContent = 'Reason for Deletion (Optional)';
+                    messageTextarea.placeholder = 'Let us know why you\'re leaving...';
+                } else {
+                    messageLabel.textContent = 'Your Privacy Question or Request *';
+                    messageTextarea.placeholder = 'Please describe your privacy inquiry or data access request...';
+                    messageTextarea.required = true;
+                }
+            });
+        });
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const email = document.getElementById('email').value.trim();
+            const message = document.getElementById('message').value.trim();
+            const requestType = document.querySelector('input[name="requestType"]:checked').value;
+
+            // Validate email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!email || !emailRegex.test(email)) {
+                showError('Please enter a valid email address');
+                return;
+            }
+
+            // Validate message for privacy inquiry
+            if (requestType === 'inquiry' && !message) {
+                showError('Please describe your privacy inquiry');
+                return;
+            }
+
+            // Disable submit button
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting...';
+            hideError();
+
+            try {
+                // Save to appropriate collection based on request type
+                const collectionName = requestType === 'deletion' 
+                    ? 'dataDeletionRequests' 
+                    : 'privacyInquiries';
+
+                const requestData = {
+                    email: email.toLowerCase(),
+                    message: message || null,
+                    requestType: requestType,
+                    requestedAt: serverTimestamp(),
+                    status: 'pending',
+                    userAgent: navigator.userAgent,
+                    processed: false
+                };
+
+                // Add reason field for deletion requests
+                if (requestType === 'deletion') {
+                    requestData.reason = message || null;
+                }
+
+                await addDoc(collection(db, collectionName), requestData);
+
+                // Update success modal message based on request type
+                if (requestType === 'deletion') {
+                    successTitle.textContent = 'Deletion Request Submitted!';
+                    successMessage.textContent = 'Your data deletion request has been received. We will process your request within 30 days and send a confirmation email to the address you provided.';
+                } else {
+                    successTitle.textContent = 'Privacy Inquiry Submitted!';
+                    successMessage.textContent = 'Your privacy inquiry has been received. We will respond to your question at the email address you provided within 5-7 business days.';
+                }
+
+                // Show success modal
+                successModal.classList.add('show');
+                
+                // Reset form
+                form.reset();
+
+            } catch (error) {
+                console.error('Error submitting request:', error);
+                showError('Failed to submit request. Please try again or contact support directly at support@coyotealert.com');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit Request';
+            }
+        });
+
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.classList.add('show');
+        }
+
+        function hideError() {
+            errorMessage.classList.remove('show');
+        }
+
+        window.closeModal = function() {
+            successModal.classList.remove('show');
+        };
+
+        // Close modal when clicking outside
+        successModal.addEventListener('click', (e) => {
+            if (e.target === successModal) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
