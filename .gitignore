@@ -1,0 +1,58 @@
+# Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
+
+# dependencies
+node_modules/
+
+# Expo
+.expo/
+dist/
+web-build/
+
+# Native
+.kotlin/
+*.orig.*
+*.jks
+*.keystore
+*.p8
+*.p12
+*.key
+*.mobileprovision
+android/keystore.properties
+
+# Metro
+.metro-health-check*
+
+# debug
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# macOS
+.DS_Store
+*.pem
+
+# local env files
+.env
+.env.*
+.env*.local
+
+# typescript
+*.tsbuildinfo
+
+app-example
+
+# Dev-time backup snapshots, not meant to be published
+_backup_*/
+
+# Secrets - real credentials, never commit
+env.js
+google-services.json
+GoogleService-Info.plist
+android/secrets.properties
+*firebase-adminsdk*.json
+*serviceAccountKey*.json
+*service-account*.json
+app.json.replaced-by-app.config.js.bak
+
+# Local release artifacts
+release-builds/
