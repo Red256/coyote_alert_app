@@ -4,7 +4,7 @@ A community app for reporting and tracking coyote sightings. Built with Expo / R
 
 Get it on Google Play: https://play.google.com/store/apps/details?id=com.coyotealert.app
 
-▶️ Watch the Coyote Alert demo on Youtube: https://youtu.be/-5YTVguN8ew
+▶️ Watch the Coyote Alert demo on Youtube: [youtu.be/-5YTVguN8ew](https://www.youtube.com/watch?v=-5YTVguN8ew)
 
 ## Features
 
