@@ -3,6 +3,7 @@
 A community app for reporting and tracking coyote sightings. Built with Expo / React Native and Firebase.
 
 Get it on Google Play: https://play.google.com/store/apps/details?id=com.coyotealert.app
+
 Link to demo video: https://youtu.be/-5YTVguN8ew
 
 ## Features
